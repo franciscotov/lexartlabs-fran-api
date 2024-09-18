@@ -1,40 +1,46 @@
 package com.lexartlabs.fran.api.controller;
 
-import com.lexartlabs.fran.api.dto.LoginData;
+import com.lexartlabs.fran.api.config.auth.TokenProvider;
+import com.lexartlabs.fran.api.dto.JwtDto;
+import com.lexartlabs.fran.api.dto.SignInDataDto;
+import com.lexartlabs.fran.api.dto.SignUpDataDto;
 import com.lexartlabs.fran.api.entities.User;
-import com.lexartlabs.fran.api.service.UserService;
+import com.lexartlabs.fran.api.service.AuthService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    private final UserService userService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthService service;
+    @Autowired
+    private TokenProvider tokenService;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@RequestBody @Valid SignUpDataDto data) {
+        service.signUp(data);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
-        System.out.println("User: " + user);
-        userService.registerUser(user);
-        return ResponseEntity.ok("User registered successfully");
+    @GetMapping("/signup")
+    public ResponseEntity<?> signUp() {
+        return ResponseEntity.ok("Hello World Get");
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginData loginData) {
-        System.out.println("Login data: " + loginData);
-        var user = userService.findByUsername(loginData.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (userService.passwordMatches(loginData.getPassword(), user.getPassword())) {
-            return ResponseEntity.ok("Login successful");
-        } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
+    @PostMapping("/signin")
+    public ResponseEntity<?> signIn(@RequestBody @Valid SignInDataDto data) {
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword());
+        var authUser = authenticationManager.authenticate(usernamePassword);
+        var accessToken = tokenService.generateAccessToken((User) authUser.getPrincipal());
+        return ResponseEntity.ok(accessToken);
     }
 }

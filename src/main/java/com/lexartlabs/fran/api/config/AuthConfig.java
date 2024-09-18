@@ -22,14 +22,30 @@ public class AuthConfig {
     @Autowired
     SecurityFilter securityFilter;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/v2/api-docs/**",
+            "/v3/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/webjars/**"
+    };
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/*").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/books").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/auth/*", "/swagger-ui/index.html#/*").permitAll()
+                        .requestMatchers(HttpMethod.POST, AUTH_WHITELIST).permitAll()
+                        .requestMatchers(HttpMethod.GET, AUTH_WHITELIST).permitAll()
+                        .requestMatchers(HttpMethod.PUT, AUTH_WHITELIST).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/auth/*", "/*").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/products/").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
