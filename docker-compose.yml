@@ -1,19 +1,26 @@
 version: '3'
 services:
   postgres:
+    container_name: postgres
     image: postgres
+    build: .
+    ports:
+      - 5432:5432
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-    ports:
-      - "5431:5432"
 
-  springboot-app:
-    image: postgres
+  springboot_app:
+    container_name: springboot_app
+    image: franciscotov9/lexartlabsfranapi
+    build: .
+    ports:
+      - 8080:8080
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5431/postgres
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: mysecretpassword
+      JWT_SECRET: yoursecret
+      DATABASE_URL: jdbc:postgresql://postgres:5432/postgres
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
     depends_on:
       - postgres
