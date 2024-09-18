@@ -1,7 +1,6 @@
 package com.lexartlabs.fran.api.controller;
 
 import com.lexartlabs.fran.api.config.auth.TokenProvider;
-import com.lexartlabs.fran.api.dto.JwtDto;
 import com.lexartlabs.fran.api.dto.SignInDataDto;
 import com.lexartlabs.fran.api.dto.SignUpDataDto;
 import com.lexartlabs.fran.api.entities.User;
