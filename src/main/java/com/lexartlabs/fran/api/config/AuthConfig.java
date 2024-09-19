@@ -15,6 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.Arrays;
 
 
 @Configuration
@@ -40,6 +43,12 @@ public class AuthConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration configuration = new CorsConfiguration();
+                    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/", "http://localhost:3000", "http://localhost","localhost", "localhost:3000", "localhost:4200", "*"));
+                    configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
+                    return configuration;
+                }))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
@@ -63,5 +72,14 @@ public class AuthConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    protected void configure(HttpSecurity http) throws Exception {
+        http.cors(cors -> cors.configurationSource(request -> {
+            CorsConfiguration configuration = new CorsConfiguration();
+            configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/", "http://localhost:3000", "http://localhost","localhost", "localhost:3000", "localhost:4200", "*"));
+            configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
+            return configuration;
+        }));
     }
 }
