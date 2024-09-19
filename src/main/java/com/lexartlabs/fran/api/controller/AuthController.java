@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost"}, maxAge = 3600)
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired

@@ -36,6 +36,7 @@ public class AuthConfig {
             "/webjars/**"
     };
 
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
