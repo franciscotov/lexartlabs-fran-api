@@ -1,19 +1,6 @@
 version: '3'
 services:
-  postgres:
-    container_name: postgres
-    image: postgres
-    build: .
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-
   springboot_app:
-    container_name: springboot_app
-    image: franciscotov9/lexartlabsfranapi
     build: .
     ports:
       - 8080:8080
@@ -22,5 +9,22 @@ services:
       DATABASE_URL: jdbc:postgresql://postgres:5432/postgres
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
+    restart: always
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+  postgres:
+    container_name: postgres
+    image: postgres:12
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always

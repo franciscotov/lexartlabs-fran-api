@@ -37,9 +37,14 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody @Valid SignInDataDto data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword());
-        var authUser = authenticationManager.authenticate(usernamePassword);
-        var accessToken = tokenService.generateAccessToken((User) authUser.getPrincipal());
-        return ResponseEntity.ok(accessToken);
+        try {
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword());
+            var authUser = authenticationManager.authenticate(usernamePassword);
+            var accessToken = tokenService.generateAccessToken((User) authUser.getPrincipal());
+            return ResponseEntity.ok(accessToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 }
