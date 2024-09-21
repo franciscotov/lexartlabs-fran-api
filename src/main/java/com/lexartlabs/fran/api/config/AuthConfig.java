@@ -45,8 +45,10 @@ public class AuthConfig {
         return httpSecurity
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/", "http://localhost:3000", "http://localhost","localhost", "localhost:3000", "localhost:4200", "*"));
+                    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/"));
                     configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
+                    configuration.setAllowedHeaders(Arrays.asList("Content-Type"));
+                    configuration.addAllowedOrigin("*");
                     return configuration;
                 }))
                 .csrf(csrf -> csrf.disable())
@@ -74,12 +76,17 @@ public class AuthConfig {
         return new BCryptPasswordEncoder();
     }
 
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.cors(cors -> cors.configurationSource(request -> {
+//            CorsConfiguration configuration = new CorsConfiguration();
+//            configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/", "http://localhost:3000", "http://localhost","localhost", "localhost:3000", "localhost:4200", "*"));
+//            configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
+//            return configuration;
+//        }));
+//    }
+
+//    @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors(cors -> cors.configurationSource(request -> {
-            CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/", "http://localhost:3000", "http://localhost","localhost", "localhost:3000", "localhost:4200", "*"));
-            configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
-            return configuration;
-        }));
+        http.cors(cors -> cors.disable());
     }
 }
