@@ -1,36 +1,37 @@
-version: '3'
 services:
   springboot_app:
-    build: .
-    ports:
-      - 8080:8080
+    build:
+      context: .
     environment:
-      JWT_SECRET: yoursecret
-      DATABASE_URL: jdbc:postgresql://postgres:5432/postgres
-      DATABASE_USERNAME: postgres
-      DATABASE_PASSWORD: postgres
+      - JWT_SECRET=yoursecret
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - SPRING_JPA_SHOW_SQL=true
     restart: always
     depends_on:
       postgres:
         condition: service_healthy
+    ports:
+      - 8080:8080
   postgres:
     container_name: postgres
-    image: postgres:16
-    ports:
-      - 5432:5432
+    image: postgres
     environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-      ROOT_PASSWORD: postgres
-      PG_SIGNAL_BACKEND_PASSWORD: postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data  # Persistent data storage
-      - ./init-scripts:/docker-entrypoint-initdb.d  # Init scripts for custom configurations
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+      - ROOT_PASSWORD=postgres
+      - PG_SIGNAL_BACKEND_PASSWORD=postgres
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data  # Persistent data storage
+#      - ./init-scripts:/docker-entrypoint-initdb.d  # Init scripts for custom configurations
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
     restart: always
-volumes:
-  postgres_data:
+    ports:
+      - 5432:5432
