@@ -17,6 +17,12 @@ public class ApiApplication {
 	@Value("${JWT_SECRET}")
 	private String jwtSecret;
 	public static void main(String[] args) {
+		System.out.println("Hello World.......................................................................................");
+		System.out.println("Hello World.......................................................................................");
+		System.out.println("Hello World.......................................................................................");
+		System.out.println("Hello World.......................................................................................");
+		System.out.println("Hello World.......................................................................................");
+		System.out.println("Hello World.......................................................................................");
 		SpringApplication.run(ApiApplication.class, args);
 	}
 
