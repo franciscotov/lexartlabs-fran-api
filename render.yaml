@@ -1,5 +1,16 @@
+# This is a basic example Blueprint for a Django web service and
+# the PostgreSQL database it connects to.
 services:
-  - type: web
+  - type: web # A Python web service named django-app running on a free instance
+    plan: free
     name: springboot-app
-    env: docker
-    dockerCommand: docker-compose up
+    runtime: docker
+#    repo: https://github.com/render-examples/django.git
+#    buildCommand: "docker-compose up"
+    startCommand: "docker-compose up"
+#
+#services:
+#  - type: web
+#    name: springboot-app
+#    env: docker
+#    dockerCommand: docker-compose up
