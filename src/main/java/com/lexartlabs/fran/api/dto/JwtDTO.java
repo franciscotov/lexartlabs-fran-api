@@ -1,9 +1,9 @@
 package com.lexartlabs.fran.api.dto;
 
-public class JwtDto {
+public class JwtDTO {
     String accessToken;
 
-    public JwtDto(String accessToken) {
+    public JwtDTO(String accessToken) {
         this.accessToken = accessToken;
     }
 }

@@ -13,42 +13,42 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<Map<String, List<String>>> handleGeneralExceptions(Exception ex) {
-        List<String> errors = List.of(ex.getMessage());
+    public final ResponseEntity<String> handleGeneralExceptions(Exception ex) {
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(errorsMap(errors));
+                .body(errorsMap().get(ex.getMessage()));
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public final ResponseEntity<Map<String, List<String>>> handleRuntimeExceptions(RuntimeException ex) {
-        List<String> errors = List.of(ex.getMessage());
-
+    public final ResponseEntity<String> handleRuntimeExceptions(RuntimeException ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(errorsMap(errors));
+                .body(errorsMap().get(ex.getMessage()));
     }
 
     @ExceptionHandler(InvalidJwtException.class)
-    public ResponseEntity<Map<String, List<String>>> handleJwtErrors(InvalidJwtException ex) {
-
-        List<String> errors = List.of(ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorsMap(errors));
+    public ResponseEntity<String> handleJwtErrors(InvalidJwtException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorsMap().get(ex.getMessage()));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Map<String, List<String>>> handleBadCredentialsError(BadCredentialsException ex) {
-
-        List<String> errors = List.of(ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorsMap(errors));
+    public ResponseEntity<String> handleBadCredentialsError(BadCredentialsException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorsMap().get(ex.getMessage()));
     }
 
-    private Map<String, List<String>> errorsMap(List<String> errors) {
-        Map<String, List<String>> errorResponse = new HashMap<>();
-        errorResponse.put("errors", errors);
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleProductNotFoundError(ProductNotFoundException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("error", errorsMap().get(ex.getMessage()));
+        response.put("productId", ex.getId());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    private Map<String, String> errorsMap() {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("errors", "errors");
+        errorResponse.put("not_found_product", "Product not found");
         return errorResponse;
     }
 }
