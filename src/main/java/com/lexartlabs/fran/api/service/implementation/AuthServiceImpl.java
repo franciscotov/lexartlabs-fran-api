@@ -1,6 +1,5 @@
 package com.lexartlabs.fran.api.service.implementation;
 
-
 import com.lexartlabs.fran.api.dto.SignUpDataDTO;
 import com.lexartlabs.fran.api.entities.User;
 import com.lexartlabs.fran.api.exceptions.InvalidJwtException;
@@ -11,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements UserDetailsService, AuthService {
@@ -25,14 +26,14 @@ public class AuthServiceImpl implements UserDetailsService, AuthService {
     }
 
     @Override
-    public UserDetails signUp(SignUpDataDTO data) throws InvalidJwtException {
-
-        if (repository.findByUsername(data.getUsername()) != null) {
-            throw new InvalidJwtException("Username already exists");
+    public SignUpDataDTO signUp(SignUpDataDTO data) {
+        if (Optional.ofNullable(repository.findByUsername(data.getUsername())).isPresent()) {
+            throw new InvalidJwtException("user_already_exist");
         }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
         User newUser = new User(data.getUsername(), encryptedPassword, data.getRole());
-        return repository.save(newUser);
+        repository.save(newUser);
+        return data;
     }
 }

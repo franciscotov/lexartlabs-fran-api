@@ -28,8 +28,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidJwtException.class)
-    public ResponseEntity<String> handleJwtErrors(InvalidJwtException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorsMap().get(ex.getMessage()));
+    public ResponseEntity<Map<String, Object>> handleJwtErrors(InvalidJwtException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("error", errorsMap().get(ex.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -49,6 +51,8 @@ public class GlobalExceptionHandler {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("errors", "errors");
         errorResponse.put("not_found_product", "Product not found");
+        errorResponse.put("user_already_exist", "User already exists");
+        errorResponse.put("invalid_credentials", "Invalid username or password");
         return errorResponse;
     }
 }

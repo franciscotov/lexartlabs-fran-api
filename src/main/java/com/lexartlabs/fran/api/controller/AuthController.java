@@ -4,10 +4,10 @@ import com.lexartlabs.fran.api.config.auth.TokenProvider;
 import com.lexartlabs.fran.api.dto.SignInDataDTO;
 import com.lexartlabs.fran.api.dto.SignUpDataDTO;
 import com.lexartlabs.fran.api.entities.User;
+import com.lexartlabs.fran.api.exceptions.InvalidJwtException;
 import com.lexartlabs.fran.api.service.implementation.AuthServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,9 +26,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid SignUpDataDTO data) {
-        service.signUp(data);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-
+        return ResponseEntity.ok(service.signUp(data));
     }
 
     @PostMapping("/signin")
@@ -39,8 +37,7 @@ public class AuthController {
             var accessToken = tokenService.generateAccessToken((User) authUser.getPrincipal());
             return ResponseEntity.ok(accessToken);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            throw new InvalidJwtException("invalid_credentials");
         }
     }
 }
