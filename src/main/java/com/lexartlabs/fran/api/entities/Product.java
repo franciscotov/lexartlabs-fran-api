@@ -17,18 +17,22 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="name", nullable = false)
     private String name;
+
+    @Column(name="brand", nullable = false)
     private String brand;
+
+    @Column(name="model", nullable = false)
     private String model;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ProductVariant> data;
 
     public Product(String name, String brand, String model) {
         this.name = name;
         this.brand = brand;
         this.model = model;
-        this.data = data;
     }
 
     public Product(String name, String brand, String model, List<ProductVariant> data) {

@@ -9,7 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Table()
+@Table(name="users", indexes = {
+        @Index(name = "idx_username", columnList = "username")
+})
 @Entity(name = "users")
 @Getter
 @NoArgsConstructor
@@ -22,11 +24,14 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="username", nullable = false, unique = true)
     private String username;
 
+    @Column(name="password", nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Column(name="role", nullable = false)
     private UserRole role;
 
     public User(String username, String password, UserRole role) {
