@@ -16,7 +16,10 @@ public class ProductVariant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="price", nullable = false)
     private Integer price;
+
+    @Column(name="color", nullable = false)
     private String color;
 
     @ManyToOne
