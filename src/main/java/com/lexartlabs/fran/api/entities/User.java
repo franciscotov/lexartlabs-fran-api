@@ -35,10 +35,10 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="username", nullable = false, unique = true)
+    @Column(name="username", nullable = false, unique = true, length = 50)
     private String username;
 
-    @Column(name="password", nullable = false)
+    @Column(name="password", nullable = false, length = 50)
     private String password;
 
     @Enumerated(EnumType.STRING)

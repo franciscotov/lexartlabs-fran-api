@@ -45,4 +45,12 @@ public class ProductMapper {
     public List<ProductDTO> toDTOList (List<Product> products) {
         return products.stream().map(this::toDTO).toList();
     }
+
+    public Product toUpdateEntity(ProductDTO dto, Product product) {
+        product.setName(dto.getName());
+        product.setBrand(dto.getBrand());
+        product.setModel(dto.getModel());
+        product.setData(ProductVariantMapper.toUpdateVariantEntityList(dto.getData(), product.getData()));
+        return product;
+    }
 }

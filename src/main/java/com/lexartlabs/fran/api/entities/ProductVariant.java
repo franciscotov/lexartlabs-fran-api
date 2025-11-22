@@ -27,7 +27,7 @@ public class ProductVariant {
     @Column(name="price", nullable = false)
     private Integer price;
 
-    @Column(name="color", nullable = false)
+    @Column(name="color", nullable = false, length = 25)
     private String color;
 
     @Column(name="available_stock", nullable = false)
@@ -37,10 +37,10 @@ public class ProductVariant {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public ProductVariant(Integer price, String color, Long availableStock) {
+    public ProductVariant(Integer price, String color, Integer availableStock) {
         this.price = price;
         this.color = color;
-        this.availableStock = availableStock.intValue();
+        this.availableStock = availableStock;
     }
 
     public Long getId() {

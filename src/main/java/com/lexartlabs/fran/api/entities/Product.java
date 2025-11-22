@@ -30,13 +30,13 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="name", nullable = false)
+    @Column(name="name", nullable = false, length = 100)
     private String name;
 
-    @Column(name="brand", nullable = false)
+    @Column(name="brand", nullable = false, length = 50)
     private String brand;
 
-    @Column(name="model", nullable = false)
+    @Column(name="model", nullable = false, length = 50)
     private String model;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)

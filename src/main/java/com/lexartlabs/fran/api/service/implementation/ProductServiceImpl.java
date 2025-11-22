@@ -41,12 +41,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductDTO updateProduct(Long id, ProductDTO productDto) {
         var actualProduct = repository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
-        actualProduct.setName(productDto.getName());
-        actualProduct.setBrand(productDto.getBrand());
-        actualProduct.setModel(productDto.getModel());
-        return mapper.toDTO(repository.save(actualProduct));
+        return mapper.toDTO(repository.save(mapper.toUpdateEntity(productDto, actualProduct)));
     }
 
     @Override
