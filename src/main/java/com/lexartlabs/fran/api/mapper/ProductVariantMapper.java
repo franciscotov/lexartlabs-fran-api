@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class ProductVariantMapper {
 
     public static ProductVariant toVariantEntity(ProductVariantDTO dto, Product product) {
-        ProductVariant variant = new ProductVariant(dto.getPrice(), dto.getColor());
+        ProductVariant variant = new ProductVariant(dto.getPrice(), dto.getColor(), dto.getAvailableStock());
         variant.setProduct(product);
         return variant;
     }
@@ -19,6 +19,7 @@ public class ProductVariantMapper {
         dto.setId(variant.getId());
         dto.setPrice(variant.getPrice());
         dto.setColor(variant.getColor());
+        dto.setAvailableStock(variant.getAvailableStock().longValue());
         return dto;
     }
 }

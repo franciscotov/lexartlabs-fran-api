@@ -6,6 +6,7 @@ public class ProductVariantDTO {
 
     private Integer price;
     private String color;
+    private Long availableStock;
 
     public Long getId() {
         return id;
@@ -29,5 +30,13 @@ public class ProductVariantDTO {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public Long getAvailableStock() {
+        return availableStock;
+    }
+
+    public void setAvailableStock(Long availableStock) {
+        this.availableStock = availableStock;
     }
 }
