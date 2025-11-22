@@ -1,5 +1,6 @@
 package com.lexartlabs.fran.api.entities;
 import com.lexartlabs.fran.api.enums.UserRole;
+import com.lexartlabs.fran.api.shared.constants.FieldLengths;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
@@ -35,14 +36,14 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="username", nullable = false, unique = true, length = 50)
+    @Column(name="username", nullable = false, unique = true, length = FieldLengths.USER_NAME_LENGTH)
     private String username;
 
-    @Column(name="password", nullable = false, length = 50)
+    @Column(name="password", nullable = false, length = FieldLengths.PASSWORD_LENGTH)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="role", nullable = false)
+    @Column(name="role", nullable = false, length = FieldLengths.ROLE_LENGTH)
     private UserRole role;
 
     public User(String username, String password, UserRole role) {

@@ -1,5 +1,11 @@
 package com.lexartlabs.fran.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lexartlabs.fran.api.shared.constants.FieldLengths;
+import com.lexartlabs.fran.api.shared.constants.Messages;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.List;
@@ -8,10 +14,23 @@ import java.util.List;
 public class ProductDTO {
     private Long id;
 
+    @JsonProperty(value = "name", required = true)
+    @Size(max = FieldLengths.PRODUCT_NAME_LENGTH, message = Messages.MAX_PRODUCT_NAME_LENGTH_EXCEEDED)
+    @NotEmpty(message = Messages.PRODUCT_NAME_REQUIRED)
     private String name;
+
+    @JsonProperty(value="brand", required = true)
+    @Size(max = FieldLengths.PRODUCT_BRAND_LENGTH, message = Messages.MAX_PRODUCT_BRAND_LENGTH_EXCEEDED)
+    @NotEmpty(message = Messages.PRODUCT_BRAND_REQUIRED)
     private String brand;
+
+    @JsonProperty(value="model", required = true)
+    @Size(max = FieldLengths.PRODUCT_MODEL_LENGTH, message = Messages.MAX_PRODUCT_MODEL_LENGTH_EXCEEDED)
+    @NotEmpty(message = Messages.PRODUCT_MODEL_REQUIRED)
     private String model;
 
+    @Valid
+    @NotEmpty
     private List<ProductVariantDTO> data;
 
     public Long getId() {

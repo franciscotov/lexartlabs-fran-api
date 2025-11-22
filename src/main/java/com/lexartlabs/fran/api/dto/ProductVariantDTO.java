@@ -1,11 +1,29 @@
 package com.lexartlabs.fran.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lexartlabs.fran.api.shared.constants.FieldLengths;
+import com.lexartlabs.fran.api.shared.constants.Messages;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import java.math.BigDecimal;
+
 public class ProductVariantDTO {
 
     private Long id;
 
-    private Integer price;
+    @JsonProperty(value = "price", required = true)
+    @NotNull(message = Messages.VARIANT_PRICE_REQUIRED)
+    private BigDecimal price;
+
+    @JsonProperty(value = "color", required = true)
+    @Size(max = FieldLengths.VARIANT_COLOR_LENGTH, message = Messages.MAX_VARIANT_COLOR_LENGTH_EXCEEDED)
+    @NotEmpty(message = Messages.VARIANT_COLOR_REQUIRED)
     private String color;
+
+    @JsonProperty(value = "available_stock", required = true)
+    @NotNull(message = Messages.VARIANT_STOCK_REQUIRED)
     private Integer availableStock;
 
     public Long getId() {
@@ -16,11 +34,11 @@ public class ProductVariantDTO {
         this.id = id;
     }
 
-    public Integer getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

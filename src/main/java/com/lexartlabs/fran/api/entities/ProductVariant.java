@@ -1,5 +1,6 @@
 package com.lexartlabs.fran.api.entities;
 
+import com.lexartlabs.fran.api.shared.constants.FieldLengths;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
@@ -13,6 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Table()
 @Entity(name = "product-variants")
 @Getter
@@ -24,10 +27,10 @@ public class ProductVariant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="price", nullable = false)
-    private Integer price;
+    @Column(name="price", nullable = false, precision = FieldLengths.VARIANT_PRICE_PRECISION, scale = FieldLengths.VARIANT_PRICE_SCALE)
+    private BigDecimal price;
 
-    @Column(name="color", nullable = false, length = 25)
+    @Column(name="color", nullable = false, length = FieldLengths.VARIANT_COLOR_LENGTH)
     private String color;
 
     @Column(name="available_stock", nullable = false)
@@ -37,7 +40,7 @@ public class ProductVariant {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public ProductVariant(Integer price, String color, Integer availableStock) {
+    public ProductVariant(BigDecimal price, String color, Integer availableStock) {
         this.price = price;
         this.color = color;
         this.availableStock = availableStock;
@@ -51,11 +54,11 @@ public class ProductVariant {
         this.id = id;
     }
 
-    public Integer getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

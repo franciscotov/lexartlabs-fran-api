@@ -1,5 +1,6 @@
 package com.lexartlabs.fran.api.entities;
 
+import com.lexartlabs.fran.api.shared.constants.FieldLengths;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
@@ -30,13 +31,13 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="name", nullable = false, length = 100)
+    @Column(name="name", nullable = false, length = FieldLengths.PRODUCT_NAME_LENGTH)
     private String name;
 
-    @Column(name="brand", nullable = false, length = 50)
+    @Column(name="brand", nullable = false, length = FieldLengths.PRODUCT_BRAND_LENGTH)
     private String brand;
 
-    @Column(name="model", nullable = false, length = 50)
+    @Column(name="model", nullable = false, length = FieldLengths.PRODUCT_MODEL_LENGTH)
     private String model;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
